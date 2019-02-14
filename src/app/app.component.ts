@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EngineerAIService } from './engineer-ai.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { interval } from 'rxjs';
+import { interval, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
@@ -20,12 +20,22 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getPollingData();
+    this.getData();
+  }
+
+  getData() {
+    this.engineerAIService.getData().subscribe(result => {
+      this.originalData = result;
+      this.search();
+      this.getPollingData();
+    });
   }
 
   getPollingData() {
     interval(this.pollTime)
-      .pipe(switchMap(() => this.engineerAIService.getData()))
+      .pipe(
+        switchMap(() => timer(0, this.pollTime)),
+        switchMap(() => this.engineerAIService.getData()))
       .subscribe(result => {
         this.originalData = result;
         this.search();
