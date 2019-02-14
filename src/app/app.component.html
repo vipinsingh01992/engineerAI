@@ -1,0 +1,54 @@
+<ng-container *ngIf="data else pleaseWait">
+  Conter: {{ counter }}
+  <div class="search">
+    <input
+      type="text"
+      placeholder="Search by title"
+      class="form-control"
+      [(ngModel)]="searchText"
+      (keyup)="search()"
+    />
+  </div>
+  <table class="table table-bordered table-hover">
+    <tr>
+      <th>Title</th>
+      <th>Url</th>
+      <th>Created At</th>
+      <th>Author</th>
+    </tr>
+    <ng-container *ngIf="data.length > 0; else elseTr">
+      <tr *ngFor="let row of data" (click)="rowClick(template); rowData = row">
+        <td>{{ row.title }}</td>
+        <td>{{ row.url }}</td>
+        <td>{{ row.created_at }}</td>
+        <td>{{ row.author }}</td>
+      </tr>
+    </ng-container>
+    <ng-template #elseTr>
+      <tr>
+        <td colspan="4">No Record Found..!!!</td>
+      </tr>
+    </ng-template>
+  </table>
+</ng-container>
+
+<ng-template #pleaseWait>
+  <div class="loader"></div>
+</ng-template>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Raw Json</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ rowData | json }}
+  </div>
+</ng-template>
