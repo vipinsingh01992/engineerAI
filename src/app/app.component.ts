@@ -5,8 +5,7 @@ import { interval } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
   data: any;
@@ -14,7 +13,6 @@ export class AppComponent implements OnInit {
   searchText: string;
   rowData: any;
   modalRef: BsModalRef;
-  counter: any = 0;
   pollTime = 10000;
   constructor(
     private engineerAIService: EngineerAIService,
@@ -29,7 +27,6 @@ export class AppComponent implements OnInit {
     interval(this.pollTime)
       .pipe(switchMap(() => this.engineerAIService.getData()))
       .subscribe(result => {
-        this.counter++;
         this.originalData = result;
         this.search();
       });
